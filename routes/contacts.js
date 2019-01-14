@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 var router = express.Router();
 
@@ -7,8 +9,19 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/delete', function(req, res, next) {
-  var phoneToRemove = req.query.phone;
-  res.send("removing contact" + phoneToRemove);
+  var phone = req.query.phone;
+
+  var fs = require('fs');
+  var content = fs.readFileSync('public/contacts.json');
+  var contacts = JSON.parse(content);
+  var remainingContacts = contacts.filter(function(contact){
+    return contact.phone !== phone;
+  });
+
+  content = JSON.stringify(remainingContacts, null ,2);
+  fs.writeFileSync('public/contacts.json', content);
+  res.json(remainingContacts);
+  // TODO please redirect to agenda.html
 
   
 });

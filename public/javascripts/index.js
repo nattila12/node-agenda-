@@ -16,7 +16,7 @@ function displayContacts(contacts){
           <td>${contact.firstName}</td>
           <td>${contact.lastName}</td>
           <td>${contact.phone}</td> 
-          <td><a href="contacts/delete?phone=${contact.phone}">X</a></td>       
+          <td><a href="/contacts/delete?phone=${contact.phone}">X</a></td>       
         
         </tr>`;
         
