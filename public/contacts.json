@@ -1,13 +1,12 @@
 [
-    {
-        "firstName" : "Nagy",
-        "lastName" : "Attila",
-        "phone": "0746372929"
-
-    },
-    {
-        "firstName": "Moldovan",
-        "lastName": "Alin",
-        "phone": "0758939237"
-    }
+  {
+    "firstName": "Nagy",
+    "lastName": "Attila",
+    "phone": "0746372929"
+  },
+  {
+    "firstName": "Moldovan",
+    "lastName": "Alin",
+    "phone": "0758939237"
+  }
 ]
