@@ -1,7 +1,11 @@
 
+var phoneToEdit = '';
+
 function loadContacts() {
     $.ajax('contacts.json').done(function (contacts) {
+        console.info('contacts loaded', contacts);
         console.log(contacts);
+        window.globalContacts = contacts;
         displayContacts(contacts);
 
 
@@ -24,12 +28,18 @@ function saveContact(){
     var lastName = $('input[name=lastName]').val();
     var phone = $('input[name=phone]').val();
     console.debug('saveContact...', firstName, lastName, phone);
-    $.post('contacts/create', {
+    
+    var actionUrl = phoneToEdit ? 'contacts/update?phone=' + phoneToEdit : 'contacts/create';
+    
+    // if(phoneToEdit){actionUrl = 'contacts/update'} else {actionUrl = 'contacts/create'};
+    
+    $.post(actionUrl, {
         firstName, //shortcut from ES6 (key is the same as value variable name)
         lastName,
         phone: phone // ES5 (key= value)
     }).done(function(response){
         console.warn('done create contact', response);
+        phoneToEdit = '';
         if(response.success){
             loadContacts();
         }
@@ -45,7 +55,11 @@ function displayContacts(contacts) {
           <td>${contact.firstName}</td>
           <td>${contact.lastName}</td>
           <td>${contact.phone}</td> 
-          <td><a href="/contacts/delete?phone=${contact.phone}">X</a></td>       
+          <td>
+            <a href="/contacts/delete?phone=${contact.phone}">&#10006;</a>
+            <a href="#" class="edit" data-id="${contact.phone}" >&#9998;</a>
+
+          </td>       
         
         </tr>`;
 
@@ -58,14 +72,34 @@ function displayContacts(contacts) {
     // rows.push(actions);
 
     document.querySelector('tbody').innerHTML = rows.join('');
+}
+
+function initEvents(){
+    // TODO use native click
+    $( "tbody" ).delegate( "a.edit", "click", function() {
+        phoneToEdit = this.getAttribute('data-id');
+
+        var contact = globalContacts.find(function(contact){
+            return contact.phone == phoneToEdit;
+        });
+        console.warn(' edit', phoneToEdit, contact);
+
+       
 
 
+        document.querySelector('input[name=firstName]').value = contact.firstName;
+        $('input[name=lastName]').val(contact.lastName);
+        $('input[name=phone]').val(contact.phone);
 
+
+        
+    });
 
 }
 
 
 loadContacts();
+initEvents();
 
 
 
