@@ -27,8 +27,6 @@ router.get('/delete', function (req, res, next) {
   //res.json({success: true});
   // TODO please redirect to agenda.html
   res.redirect('/agenda.html')
-
-
 });
 
 
@@ -42,22 +40,16 @@ router.post('/create', function (req, res, next) {
 
   var content = fs.readFileSync('public/contacts.json');
   var contacts = JSON.parse(content);
-
   contacts.push({
-
     firstName,
     lastName,
     phone
-
   });
 
   content = JSON.stringify(contacts, null, 2);
   fs.writeFileSync('public/contacts.json', content);
 
   res.json({success: true});
-  
-
-
 });
 
 // /contacts/update

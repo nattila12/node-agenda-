@@ -7,10 +7,7 @@ function loadContacts() {
         console.log(contacts);
         window.globalContacts = contacts;
         displayContacts(contacts);
-
-
     });
-
 }
 
 function getNewRow() {
@@ -58,11 +55,8 @@ function displayContacts(contacts) {
           <td>
             <a href="/contacts/delete?phone=${contact.phone}">&#10006;</a>
             <a href="#" class="edit" data-id="${contact.phone}" >&#9998;</a>
-
-          </td>       
-        
+            </td>       
         </tr>`;
-
     });
     console.warn('rows', rows);
 
@@ -83,19 +77,19 @@ function initEvents(){
             return contact.phone == phoneToEdit;
         });
         console.warn(' edit', phoneToEdit, contact);
-
-       
-
-
         document.querySelector('input[name=firstName]').value = contact.firstName;
         $('input[name=lastName]').val(contact.lastName);
-        $('input[name=phone]').val(contact.phone);
-
-
-        
+        $('input[name=phone]').val(contact.phone); 
     });
 
+    document.getElementById('search').addEventListener('input', doSearch);
+};
+
+function doSearch(){
+    var value = this.value;
+    console.warn('To do search', value );
 }
+
 
 
 loadContacts();
