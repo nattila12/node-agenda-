@@ -3,6 +3,15 @@
 
 A simple app using node & express for managing phone books
 
+## Content 
+- CRUD operation 
+   - **C**reate new contact 
+   - Read contacts from [contacts.json](public/contacts.json)
+   file
+   - **U**pdate contacts
+   - **D**elete contact 
+- Search contacts(TODO)
+
 ## Setup
 
 ```
