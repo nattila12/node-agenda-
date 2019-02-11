@@ -25,3 +25,25 @@ npm run devstart
 ```
 
 open http://localhost:3000/
+
+
+## installing and running mariaDb from mac
+1. install homebrew:
+   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+2. install mariaDb:
+   brew install mariadb
+
+3. start mariaDb server:  
+   mysql.server start
+
+4. login: 
+   mysql -u root -p
+
+5. run only once: 
+   CREATE DATABASE phone_book;
+   USE phone_book;
+   CREATE TABLE contacts (id INT AUTO_INCREMENT, firstName TEXT, lastName TEXT, phone TEXT, PRIMARY KEY(id));
+   SHOW TABLES;
+
+   INSERT INTO contacts (firstName,lastName,phone) VALUES("andrei","vasile","123");

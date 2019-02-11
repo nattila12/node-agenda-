@@ -2,7 +2,7 @@
 var phoneToEdit = '';
 
 function loadContacts() {
-    $.ajax('contacts.json').done(function (contacts) {
+    $.ajax('contacts/').done(function (contacts) {
         // console.info('contacts loaded', contacts);
         // console.log(contacts);
         window.globalContacts = contacts;
