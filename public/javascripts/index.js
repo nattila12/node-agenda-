@@ -5,7 +5,10 @@ var API_URL = {
     READ: 'contacts',
     UPDATE: 'contacts/update',
     DELETE: 'contacts/delete'
+};
 
+if(location.host === "nattila12github.io"){
+    API_URL.READ = 'data/contacts.json'
 }
 
 
