@@ -1,8 +1,16 @@
-
 var phoneToEdit = '';
 
+var API_URL = {
+    CREATE: 'contacts/create',
+    READ: 'contacts',
+    UPDATE: 'contacts/update',
+    DELETE: 'contacts/delete'
+
+}
+
+
 function loadContacts() {
-    $.ajax('contacts/').done(function (contacts) {
+    $.ajax(API_URL.READ).done(function (contacts) {
         // console.info('contacts loaded', contacts);
         // console.log(contacts);
         window.globalContacts = contacts;
@@ -10,15 +18,6 @@ function loadContacts() {
     });
 }
 
-function getNewRow() {
-    return `<tr>
-    <td><input type="text" name="firstName" placeholder="First Name" /></td>
-    <td><input type="text" name="lastName" placeholder="Last Name" /></td>
-    <td><input type="text" name="phone" placeholder="Phone" /></td> 
-    <td><button onclick="saveContact()" >Save</button></a></td>       
-  
-  </tr>`;
-}
 function saveContact() {
 
     var firstName = document.querySelector('input[name=firstName]').value;
@@ -26,7 +25,7 @@ function saveContact() {
     var phone = $('input[name=phone]').val();
     console.debug('saveContact...', firstName, lastName, phone);
 
-    var actionUrl = phoneToEdit ? 'contacts/update?phone=' + phoneToEdit : 'contacts/create';
+    var actionUrl = phoneToEdit ? API_URL.UPDATE +'?id=' + phoneToEdit : API_URL.CREATE;
 
     // if(phoneToEdit){actionUrl = 'contacts/update'} else {actionUrl = 'contacts/create'};
 
@@ -53,18 +52,12 @@ function displayContacts(contacts) {
           <td>${contact.lastName}</td>
           <td>${contact.phone}</td> 
           <td>
-            <a href="/contacts/delete?phone=${contact.phone}">&#10006;</a>
-            <a href="#" class="edit" data-id="${contact.phone}" >&#9998;</a>
+            <a href="${API_URL.DELETE}?id=${contact.id}">&#10006;</a>
+            <a href="#" class="edit" data-id="${contact.id}" >&#9998;</a>
             </td>       
         </tr>`;
     });
     // console.warn('rows', rows);
-
-    rows.push(getNewRow()); //simplified
-
-    // var actions = getNewRow();
-    // rows.push(actions);
-
     document.querySelector('tbody').innerHTML = rows.join('');
 }
 
@@ -74,7 +67,7 @@ function initEvents() {
         phoneToEdit = this.getAttribute('data-id');
 
         var contact = globalContacts.find(function (contact) {
-            return contact.phone == phoneToEdit;
+            return contact.id == phoneToEdit;
         });
         console.warn(' edit', phoneToEdit, contact);
         document.querySelector('input[name=firstName]').value = contact.firstName;

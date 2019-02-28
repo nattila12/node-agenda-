@@ -23,78 +23,61 @@ router.get('/', function (req, res, next) {
   })
 });
 
-// /contacts/delete?phone=1234
+// /contacts/delete?id=3
 
 router.get('/delete', function (req, res, next) {
-  var phone = req.query.phone;
+  var id = req.query.id;
 
-
-  var content = fs.readFileSync('public/contacts.json');
-  var contacts = JSON.parse(content);
-  var remainingContacts = contacts.filter(function (contact) {
-    return contact.phone !== phone;
-  });
-
-  content = JSON.stringify(remainingContacts, null, 2);
-  fs.writeFileSync('public/contacts.json', content);
-
-  //res.json({success: true});
-  // TODO please redirect to agenda.html
-  res.redirect('/agenda.html')
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    const sql = `DELETE FROM contacts WHERE id=${id}`;
+    connection.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      console.log(result);
+      res.redirect('/agenda.html')
+    })
+  })
 });
 
 
 // /contacts/create?phone=1234
 
 router.post('/create', function (req, res, next) {
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var phone = req.body.phone;
+
   pool.getConnection(function (err, connection) {
     if (err) throw err;
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var phone = req.body.phone;
-    const sql = `INSERT INTO contacts (id, firstName, lastName, phone) VALUES (NULL, '${firstName}', '${lastName}', '${phone}')`;
+    const sql = `INSERT INTO contacts (firstName, lastName, phone) VALUES ('${firstName}', '${lastName}', '${phone}')`;
     connection.query(sql, function (err, result, fields) {
       if (err) throw err;
-      console.log(results);
+      console.log(result);
       res.json({ success: true });
     })
-
   });
-  
 });
 
 // /contacts/update
 
 router.post('/update', function (req, res, next) {
-  var oldPhone = req.query.phone;
+  var id = req.query.id;
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var phone = req.body.phone;
 
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    const sql = `UPDATE contacts SET firstName='${firstName}', lastName='${lastName}', phone='${phone}' WHERE id=${id};`;
 
-  var content = fs.readFileSync('public/contacts.json');
-  var contacts = JSON.parse(content);
+    console.log('sql', sql);
 
-  //update...(v1);
-
-  var contact = contacts.find(function (contact) {
-    return contact.phone == oldPhone;
-  });
-
-  contact.phone = phone;
-  contact.firstName = firstName;
-  contact.lastName = lastName;
-  // TODO update.....(v2);
-
-
-
-  content = JSON.stringify(contacts, null, 2);
-  fs.writeFileSync('public/contacts.json', content);
-
-  res.json({ success: true });
-
-
-
+    connection.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log(result);
+      res.json({ success: true });
+    })
+  })
 });
 
 module.exports = router;
